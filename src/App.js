@@ -28,24 +28,14 @@ class App extends Component {
     }
   };
 
-  handleToggleComplete = (taskId) => {
-    this.setState((prevState) => ({
-      tasks: prevState.tasks.map((task) =>
-        task.id === taskId
-          ? { ...task, completed: !task.completed, progress: "" }
-          : task
-      ),
-    }));
-  };
-
-  handleProgress = (taskId) => {
+  handleToggleTask = (taskId, toggleType) => {
     this.setState((prevState) => ({
       tasks: prevState.tasks.map((task) =>
         task.id === taskId
           ? {
               ...task,
-              progress: task.progress === "" ? "In Progress" : "",
-              completed: false,
+              completed: toggleType === "complete" ? !task.completed : task.completed,
+              progress: toggleType === "progress" ? (task.progress === "" ? "In Progress" : "") : task.progress,
             }
           : task
       ),
@@ -95,15 +85,12 @@ class App extends Component {
         {/* Task List */}
         <ul className="list-disc">
           {tasks.map((task) => (
-            <li
-              key={task.id}
-              className="flex items-center justify-between p-2 border-b"
-            >
+            <li key={task.id} className="flex items-center justify-between p-2 border-b">
               <div className="flex items-center">
                 <input
                   type="checkbox"
                   checked={task.completed}
-                  onChange={() => this.handleToggleComplete(task.id)}
+                  onChange={() => this.handleToggleTask(task.id, "complete")}
                   className="mr-2"
                 />
                 <span
@@ -116,24 +103,16 @@ class App extends Component {
               </div>
               <div>
                 <button
-                  onClick={() => this.handleProgress(task.id)}
+                  onClick={() => this.handleToggleTask(task.id, "progress")}
                   className="mr-2 px-2 py-1 bg-blue-500 text-white rounded"
                 >
                   {task.progress === "In Progress" ? "In Progress" : "To Do"}
                 </button>
                 <button
-                  onClick={() =>
-                    this.handleEditTask(task.id, prompt("Enter new task name:"))
-                  }
+                  onClick={() => this.handleEditTask(task.id, prompt("Enter new task name:"))}
                   className="mr-2 px-2 py-1 bg-yellow-500 text-white rounded"
                 >
                   Edit
-                </button>
-                <button
-                  onClick={() => this.handleToggleComplete(task.id)}
-                  className="mr-2 px-2 py-1 bg-green-500 text-white rounded"
-                >
-                  {task.completed ? "Undo" : "Complete"}
                 </button>
                 <button
                   onClick={() => this.handleDeleteTask(task.id)}

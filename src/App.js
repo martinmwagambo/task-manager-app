@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import TaskList from "./components/Tasklist";
 
 class App extends Component {
   // Constructor to initialize state
